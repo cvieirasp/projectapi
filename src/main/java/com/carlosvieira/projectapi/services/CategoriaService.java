@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.carlosvieira.projectapi.domain.Categoria;
 import com.carlosvieira.projectapi.repositories.CategoriaRepository;
+import com.carlosvieira.projectapi.services.exceptions.EntityNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -16,6 +17,6 @@ public class CategoriaService {
 
 	public Categoria get(Integer id) {
 		Optional<Categoria> entity = repository.findById(id);
-		return entity.orElse(null);
+		return entity.orElseThrow(() -> new EntityNotFoundException(String.format("Entidade não encontrada! Id: %d, Tipo: %s", id, Categoria.class.getName()))); 
 	}
 }
