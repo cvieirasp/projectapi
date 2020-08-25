@@ -1,6 +1,8 @@
 package com.carlosvieira.projectapi.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.carlosvieira.projectapi.domain.Categoria;
+import com.carlosvieira.projectapi.dto.CategoriaDTO;
 import com.carlosvieira.projectapi.services.CategoriaService;
 
 @RestController
@@ -25,6 +28,13 @@ public class CategoriaResource {
 	public ResponseEntity<Categoria> get(@PathVariable Integer id) {
 		Categoria entity = service.get(id);
 		return ResponseEntity.ok().body(entity);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> list() {
+		List<Categoria> entities = service.list();
+		List<CategoriaDTO> dtos = entities.stream().map(e -> new CategoriaDTO(e)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(dtos);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
