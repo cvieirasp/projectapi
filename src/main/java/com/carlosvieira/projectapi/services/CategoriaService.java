@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.carlosvieira.projectapi.domain.Categoria;
+import com.carlosvieira.projectapi.dto.CategoriaDTO;
 import com.carlosvieira.projectapi.repositories.CategoriaRepository;
 import com.carlosvieira.projectapi.services.exceptions.DataIntegrityException;
 import com.carlosvieira.projectapi.services.exceptions.EntityNotFoundException;
@@ -53,5 +54,9 @@ public class CategoriaService {
 		Direction direction = (isDesc ? Direction.DESC : Direction.ASC);
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, direction, orderBy);
 		return repository.findAll(pageRequest);
+	}
+	
+	public Categoria fromDTO(CategoriaDTO dto) {
+		return new Categoria(dto.getId(), dto.getNome());
 	}
 }
