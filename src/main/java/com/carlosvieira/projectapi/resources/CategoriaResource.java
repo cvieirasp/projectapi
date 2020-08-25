@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,7 +35,19 @@ public class CategoriaResource {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> list() {
 		List<Categoria> entities = service.list();
-		List<CategoriaDTO> dtos = entities.stream().map(e -> new CategoriaDTO(e)).collect(Collectors.toList());
+		List<CategoriaDTO> dtos = entities.stream().map(entity -> new CategoriaDTO(entity)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(dtos);
+	}
+	
+	@RequestMapping(value = "/page", method = RequestMethod.GET)
+	public ResponseEntity<Page<CategoriaDTO>> listPage(
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "lines", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "order", defaultValue = "id") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+		
+		Page<Categoria> entities = service.listPage(page, linesPerPage, orderBy, direction.equalsIgnoreCase("DESC"));
+		Page<CategoriaDTO> dtos = entities.map(entity -> new CategoriaDTO(entity));
 		return ResponseEntity.ok().body(dtos);
 	}
 	
