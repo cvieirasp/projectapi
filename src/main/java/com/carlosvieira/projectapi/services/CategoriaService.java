@@ -19,4 +19,9 @@ public class CategoriaService {
 		Optional<Categoria> entity = repository.findById(id);
 		return entity.orElseThrow(() -> new EntityNotFoundException(String.format("Entidade não encontrada! Id: %d, Tipo: %s", id, Categoria.class.getName()))); 
 	}
+	
+	public Categoria insert(Categoria entity) {
+		entity.setId(null);
+		return repository.save(entity);
+	}
 }
