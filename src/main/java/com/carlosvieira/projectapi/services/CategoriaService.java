@@ -24,7 +24,7 @@ public class CategoriaService {
 
 	public Categoria get(Integer id) {
 		Optional<Categoria> entity = repository.findById(id);
-		return entity.orElseThrow(() -> new EntityNotFoundException(String.format("Entidade não encontrada! Id: %d, Tipo: %s", id, Categoria.class.getName()))); 
+		return entity.orElseThrow(() -> new EntityNotFoundException(String.format("Categoria não encontrada! Id: %d, Tipo: %s", id, Categoria.class.getName()))); 
 	}
 	
 	public List<Categoria> list() {
@@ -37,7 +37,8 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria entity) {
-		get(entity.getId());
+		Categoria entityToUpdate = get(entity.getId());
+		updateData(entityToUpdate, entity);
 		return repository.save(entity);
 	}
 	
@@ -58,5 +59,9 @@ public class CategoriaService {
 	
 	public Categoria fromDTO(CategoriaDTO dto) {
 		return new Categoria(dto.getId(), dto.getNome());
+	}
+	
+	private void updateData(Categoria entityToUpdate, Categoria entity) {
+		entityToUpdate.setNome(entity.getNome());
 	}
 }
